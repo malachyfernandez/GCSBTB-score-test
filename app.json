@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rn-convex-test",
-    "slug": "rn-convex-test",
+    "name": "base-convex-rn-clerk-hooks",
+    "slug": "base-convex-rn-clerk-hooks",
     "scheme": "my-convex-app",
     "version": "1.0.0",
     "web": {
@@ -26,7 +26,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.rn-convex-test"
+      "bundleIdentifier": "com.anonymous.base-convex-rn-clerk-hooks"
     },
     "android": {
       "adaptiveIcon": {

@@ -1,5 +1,5 @@
 {
-  "name": "rn-convex-test",
+  "name": "base-convex-rn-clerk-hooks",
   "version": "1.0.0",
   "scripts": {
     "android": "expo run:android",
