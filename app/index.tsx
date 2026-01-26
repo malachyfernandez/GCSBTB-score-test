@@ -5,7 +5,7 @@ import { useUserVariable } from "../hooks/useUserVariable";
 import { useGlobalVariable } from "../hooks/useGlobalVariable";
 import { useSyncUserData } from "../hooks/useSyncUserData";
 import { useSearch } from "../hooks/useSearch";
-import { useFonts } from 'expo-font'; 
+import { useFonts } from 'expo-font';
 
 import FriendCardItem from "./components/FriendCardItem";
 import ChangeCountButton from "./components/ChangeCountButton";
@@ -73,6 +73,113 @@ export default function HomeScreen() {
   // 2. Local state to track which screen we are on (null = menu)
   const [currentView, setCurrentView] = useState<string | null>(null);
 
+  //Adjust amount useState
+  
+
+  // Keyboard listener for keys 1-5
+  useEffect(() => {
+    const handleKeyPress = (event: any) => {
+      const key = event.key;
+
+      if (key == '1') {
+        if (p1 !== null && p1 !== undefined) {
+          setP1(p1 + 1);
+          console.log("Player 1 score:", p1 + 1);
+        }
+      }
+      if (key == '2') {
+        if (p2 !== null && p2 !== undefined) {
+          setP2(p2 + 1);
+          console.log("Player 2 score:", p2 + 1);
+        }
+      }
+      if (key == '3') {
+        if (p3 !== null && p3 !== undefined) {
+          setP3(p3 + 1);
+          console.log("Player 3 score:", p3 + 1);
+        }
+      }
+      if (key == '4') {
+        if (p4 !== null && p4 !== undefined) {
+          setP4(p4 + 1);
+          console.log("Player 4 score:", p4 + 1);
+        }
+      }
+      if (key == '5') {
+        if (p5 !== null && p5 !== undefined) {
+          setP5(p5 + 1);
+          console.log("Player 5 score:", p5 + 1);
+        }
+      }
+      //Shift versions (1 is !, 2 is @, 3 is #, 4 is $, 5 is %)
+      if (key == '!') {
+        if (p1 !== null && p1 !== undefined) {
+          setP1(p1 - 1);
+        }
+      }
+      if (key == '@') {
+        if (p2 !== null && p2 !== undefined) {
+          setP2(p2 - 1);
+        }
+      }
+      if (key == '#') {
+        if (p3 !== null && p3 !== undefined) {
+          setP3(p3 - 1);
+        }
+      }
+      if (key == '$') {
+        if (p4 !== null && p4 !== undefined) {
+          setP4(p4 - 1);
+        }
+      }
+      if (key == '%') {
+        if (p5 !== null && p5 !== undefined) {
+          setP5(p5 - 1);
+        }
+      }
+
+      // if (key >= '1' && key <= '5') {
+      //   const playerNum = parseInt(key);
+      //   switch (playerNum) {
+      //     case 1:
+      //       if (p1 !== null && p1 !== undefined) {
+      //         setP1(p1 + adjustAmount);
+      //         console.log("Player 1 score:", p1 + adjustAmount);
+      //       }
+      //       break;
+      //     case 2:
+      //       if (p2 !== null && p2 !== undefined) {
+      //         setP2(p2 + adjustAmount);
+      //       }
+      //       break;
+      //     case 3:
+      //       if (p3 !== null && p3 !== undefined) {
+      //         setP3(p3 + adjustAmount);
+      //       }
+      //       break;
+      //     case 4:
+      //       if (p4 !== null && p4 !== undefined) {
+      //         setP4(p4 + adjustAmount);
+      //       }
+      //       break;
+      //     case 5:
+      //       if (p5 !== null && p5 !== undefined) {
+      //         setP5(p5 + adjustAmount);
+      //       }
+      //       break;
+      //   }
+      // }
+    };
+
+    // Add keyboard event listener
+    if (Platform.OS === 'web') {
+      window.addEventListener('keydown', handleKeyPress);
+      return () => {
+        window.removeEventListener('keydown', handleKeyPress);
+      };
+    }
+  }, [p1, p2, p3, p4, p5, setP1, setP2, setP3, setP4, setP5]);
+
   // Helper to render a player control row in the Panel
   const renderControl = (label: string, score: any, setScore: any) => (
     <View className="flex-row items-center justify-between w-full mb-4 bg-slate-950 p-2 rounded-lg">
@@ -105,64 +212,7 @@ export default function HomeScreen() {
     <SafeAreaView className="flex-1 bg-black">
       <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 40 }}>
         <SignedIn>
-          <View className="flex-col gap-10 items-center mt-10 w-full px-4">
-
-            {/* MAIN MENU: Select Identity */}
-            {currentView === null && (
-              <View className="w-full gap-4">
-                <Subheading>Select Identity</Subheading>
-                {[1, 2, 3, 4, 5].map((num) => (
-                  <TouchableOpacity
-                    key={num}
-                    onPress={() => setCurrentView(`player${num}`)}
-                    className="bg-blue-600 p-4 rounded-xl items-center"
-                  >
-                    <Text className="text-white text-lg font-bold">Player {num}</Text>
-                  </TouchableOpacity>
-                ))}
-
-                <View className="h-[1px] bg-slate-700 my-2" />
-
-                <TouchableOpacity
-                  onPress={() => setCurrentView("panel")}
-                  className="bg-purple-600 p-4 rounded-xl items-center"
-                >
-                  <Text className="text-white text-lg font-bold">Control Panel</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-
-            {/* PLAYER VIEWS: Read Only - Using DigitalScore */}
-            {currentView === "player1" && <View><Subheading>Player 1 Score</Subheading><DigitalScore score={p1} /></View>}
-            {currentView === "player2" && <View><Subheading>Player 2 Score</Subheading><DigitalScore score={p2} /></View>}
-            {currentView === "player3" && <View><Subheading>Player 3 Score</Subheading><DigitalScore score={p3} /></View>}
-            {currentView === "player4" && <View><Subheading>Player 4 Score</Subheading><DigitalScore score={p4} /></View>}
-            {currentView === "player5" && <View><Subheading>Player 5 Score</Subheading><DigitalScore score={p5} /></View>}
-
-            {/* PANEL VIEW: Controls */}
-            {currentView === "panel" && (
-              <View className="w-full">
-                <Subheading>Game Master Panel</Subheading>
-                {renderControl("P1", p1, setP1)}
-                {renderControl("P2", p2, setP2)}
-                {renderControl("P3", p3, setP3)}
-                {renderControl("P4", p4, setP4)}
-                {renderControl("P5", p5, setP5)}
-              </View>
-            )}
-
-            {/* Navigation Controls */}
-            {currentView !== null && (
-              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-slate-700 p-3 rounded-lg">
-                <Text className="text-white">Back to Menu</Text>
-              </TouchableOpacity>
-            )}
-
-          </View>
-
-          <TouchableOpacity onPress={() => signOut()} className="mt-12">
-            <Text className="text-gray-500">Log Out</Text>
-          </TouchableOpacity>
+          <BigText>HELLO</BigText>
         </SignedIn>
 
 
@@ -225,7 +275,7 @@ export default function HomeScreen() {
             {/* PANEL VIEW: Controls */}
             {currentView === "panel" && (
               <View className="w-full">
-                <Subheading>Game Master Panel</Subheading>
+                <Subheading>Game Master Panel </Subheading>
                 {renderControl("P1", p1, setP1)}
                 {renderControl("P2", p2, setP2)}
                 {renderControl("P3", p3, setP3)}
