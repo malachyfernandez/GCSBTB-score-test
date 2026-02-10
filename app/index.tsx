@@ -76,6 +76,8 @@ export default function HomeScreen() {
 
   const [sizes, setSizes] = useGlobalVariable<playerNumberArray>("player-sizes", [200, 200, 200, 200, 200]);
   const [rotations, setRotations] = useGlobalVariable<playerNumberArray>("player-rotation", [0, 0, 0, 0, 0]);
+  const [xPositions, setXPositions] = useGlobalVariable<playerNumberArray>("player-x-position", [0, 0, 0, 0, 0]);
+  const [yPositions, setYPositions] = useGlobalVariable<playerNumberArray>("player-y-position", [0, 0, 0, 0, 0]);
 
   // 2. Local state to track which screen we are on (null = menu)
   const [currentView, setCurrentView] = useState<string | null>(null);
@@ -209,11 +211,11 @@ export default function HomeScreen() {
             {currentView === "panel" ? (
               <View className="w-full gap-4">
                 <Subheading>Game Master Panel! </Subheading>
-                <PlayerControl label="P1" score={p1} setScore={setP1} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={1} />
-                <PlayerControl label="P2" score={p2} setScore={setP2} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={2} />
-                <PlayerControl label="P3" score={p3} setScore={setP3} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={3} />
-                <PlayerControl label="P4" score={p4} setScore={setP4} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={4} />
-                <PlayerControl label="P5" score={p5} setScore={setP5} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={5} />
+                <PlayerControl label="P1" score={p1} setScore={setP1} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} xPositions={xPositions} setXPositions={setXPositions} yPositions={yPositions} setYPositions={setYPositions} playerNumber={1} />
+                <PlayerControl label="P2" score={p2} setScore={setP2} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} xPositions={xPositions} setXPositions={setXPositions} yPositions={yPositions} setYPositions={setYPositions} playerNumber={2} />
+                <PlayerControl label="P3" score={p3} setScore={setP3} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} xPositions={xPositions} setXPositions={setXPositions} yPositions={yPositions} setYPositions={setYPositions} playerNumber={3} />
+                <PlayerControl label="P4" score={p4} setScore={setP4} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} xPositions={xPositions} setXPositions={setXPositions} yPositions={yPositions} setYPositions={setYPositions} playerNumber={4} />
+                <PlayerControl label="P5" score={p5} setScore={setP5} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} xPositions={xPositions} setXPositions={setXPositions} yPositions={yPositions} setYPositions={setYPositions} playerNumber={5} />
               </View>
             ) : currentView === "player1" || currentView === "player2" || currentView === "player3" || currentView === "player4" || currentView === "player5" ? (
 
@@ -222,35 +224,35 @@ export default function HomeScreen() {
             {currentView === "player1" &&
 
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p1} size={sizes?.[0]} rotation={rotations?.[0]} />
+                <DigitalScore score={p1} size={sizes?.[0]} rotation={rotations?.[0]} x={xPositions?.[0]} y={yPositions?.[0]} />
               </TouchableOpacity>
 
             }
             {currentView === "player2" &&
 
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p2} size={sizes?.[1]} rotation={rotations?.[1]} />
+                <DigitalScore score={p2} size={sizes?.[1]} rotation={rotations?.[1]} x={xPositions?.[1]} y={yPositions?.[1]} />
               </TouchableOpacity>
 
             }
             {currentView === "player3" &&
 
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p3} size={sizes?.[2]} rotation={rotations?.[2]} />
+                <DigitalScore score={p3} size={sizes?.[2]} rotation={rotations?.[2]} x={xPositions?.[2]} y={yPositions?.[2]} />
               </TouchableOpacity>
 
             }
             {currentView === "player4" &&
 
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p4} size={sizes?.[3]} rotation={rotations?.[3]} />
+                <DigitalScore score={p4} size={sizes?.[3]} rotation={rotations?.[3]} x={xPositions?.[3]} y={yPositions?.[3]} />
               </TouchableOpacity>
 
             }
             {currentView === "player5" &&
 
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p5} size={sizes?.[4]} rotation={rotations?.[4]} />
+                <DigitalScore score={p5} size={sizes?.[4]} rotation={rotations?.[4]} x={xPositions?.[4]} y={yPositions?.[4]} />
               </TouchableOpacity>
 
             }
