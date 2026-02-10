@@ -74,14 +74,14 @@ export default function HomeScreen() {
   const [p4, setP4] = useGlobalVariable<number>("player4-score", 0);
   const [p5, setP5] = useGlobalVariable<number>("player5-score", 0);
 
-  const [sizes, setSizes] = useGlobalVariable<playerNumberArray>("player-sizes", [100, 100, 100, 100, 100]);
+  const [sizes, setSizes] = useGlobalVariable<playerNumberArray>("player-sizes", [200, 200, 200, 200, 200]);
   const [rotations, setRotations] = useGlobalVariable<playerNumberArray>("player-rotation", [0, 0, 0, 0, 0]);
 
   // 2. Local state to track which screen we are on (null = menu)
   const [currentView, setCurrentView] = useState<string | null>(null);
 
   //Adjust amount useState
-  
+
 
   // Keyboard listener for keys 1-5
   useEffect(() => {
@@ -167,9 +167,9 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-black">
-      <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 40 }}>
+      
         <SignedIn>
-          
+
           <TouchableOpacity onPress={() => signOut()}>
             <BigText>Sign Out</BigText>
           </TouchableOpacity>
@@ -205,35 +205,8 @@ export default function HomeScreen() {
               </View>
             )}
 
-            {/* PLAYER VIEWS: Read Only (Click to exit) - Using DigitalScore */}
-            {currentView === "player1" && <View>
-              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p1} size={sizes?.[0]} rotation={rotations?.[0]}/>
-              </TouchableOpacity>
-            </View>}
-            {currentView === "player2" && <View>
-              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p2} size={sizes?.[1]} rotation={rotations?.[1]}/>
-              </TouchableOpacity>
-            </View>}
-            {currentView === "player3" && <View>
-              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p3} size={sizes?.[2]} rotation={rotations?.[2]}/>
-              </TouchableOpacity>
-            </View>}
-            {currentView === "player4" && <View>
-              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p4} size={sizes?.[3]} rotation={rotations?.[3]}/>
-              </TouchableOpacity>
-            </View>}
-            {currentView === "player5" && <View>
-              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p5} size={sizes?.[4]} rotation={rotations?.[4]}/>
-              </TouchableOpacity>
-            </View>}
-
             {/* PANEL VIEW: Controls */}
-            {currentView === "panel" && (
+            {currentView === "panel" ? (
               <View className="w-full gap-4">
                 <Subheading>Game Master Panel! </Subheading>
                 <PlayerControl label="P1" score={p1} setScore={setP1} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={1} />
@@ -242,18 +215,59 @@ export default function HomeScreen() {
                 <PlayerControl label="P4" score={p4} setScore={setP4} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={4} />
                 <PlayerControl label="P5" score={p5} setScore={setP5} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={5} />
               </View>
-            )}
+            ) : currentView === "player1" || currentView === "player2" || currentView === "player3" || currentView === "player4" || currentView === "player5" ? (
 
-            {/* Navigation Controls */}
-            {currentView === "panel" && (
-              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-slate-700 p-3 rounded-lg">
-                <Text className="text-white">Back to Menu</Text>
+            < View className="w-screen h-full flex justify-center items-center bg-black">
+            {/* PLAYER VIEWS: Read Only (Click to exit) - Using DigitalScore */}
+            {currentView === "player1" &&
+
+              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
+                <DigitalScore score={p1} size={sizes?.[0]} rotation={rotations?.[0]} />
               </TouchableOpacity>
-            )}
 
-          </View>
-        </SignedOut>
-      </ScrollView>
+            }
+            {currentView === "player2" &&
+
+              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
+                <DigitalScore score={p2} size={sizes?.[1]} rotation={rotations?.[1]} />
+              </TouchableOpacity>
+
+            }
+            {currentView === "player3" &&
+
+              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
+                <DigitalScore score={p3} size={sizes?.[2]} rotation={rotations?.[2]} />
+              </TouchableOpacity>
+
+            }
+            {currentView === "player4" &&
+
+              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
+                <DigitalScore score={p4} size={sizes?.[3]} rotation={rotations?.[3]} />
+              </TouchableOpacity>
+
+            }
+            {currentView === "player5" &&
+
+              <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
+                <DigitalScore score={p5} size={sizes?.[4]} rotation={rotations?.[4]} />
+              </TouchableOpacity>
+
+            }
+          </View>              
+            
+          ) : null}
+
+
+          {/* Navigation Controls */}
+          {currentView === "panel" && (
+            <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-slate-700 p-3 rounded-lg">
+              <Text className="text-white">Back to Menu</Text>
+            </TouchableOpacity>
+          )}
+
+        </View>
+      </SignedOut>
     </SafeAreaView >
   );
 }
