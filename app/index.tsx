@@ -12,6 +12,7 @@ import ChangeCountButton from "./components/ChangeCountButton";
 import AuthButton from "./components/AuthButton";
 import BigText from "./components/BigText";
 import Subheading from "./components/Subheading";
+import PlayerControl from "./components/PlayerControl";
 
 import { SignedIn, SignedOut, useOAuth, useClerk, useUser } from "@clerk/clerk-expo";
 
@@ -19,6 +20,7 @@ import { Platform } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 
 import { useEffect, useState } from "react";
+import DigitalScore from "./components/DigitalScore";
 
 
 // Warm up the browser (required for Android reliability)
@@ -58,6 +60,8 @@ export default function HomeScreen() {
     searchKey: "name"
   });
 
+  type playerNumberArray = [number, number, number, number, number];
+
   // updates userData
   useSyncUserData(userData, setUserData);
 
@@ -69,6 +73,9 @@ export default function HomeScreen() {
   const [p3, setP3] = useGlobalVariable<number>("player3-score", 0);
   const [p4, setP4] = useGlobalVariable<number>("player4-score", 0);
   const [p5, setP5] = useGlobalVariable<number>("player5-score", 0);
+
+  const [sizes, setSizes] = useGlobalVariable<playerNumberArray>("player-sizes", [100, 100, 100, 100, 100]);
+  const [rotations, setRotations] = useGlobalVariable<playerNumberArray>("player-rotation", [0, 0, 0, 0, 0]);
 
   // 2. Local state to track which screen we are on (null = menu)
   const [currentView, setCurrentView] = useState<string | null>(null);
@@ -138,37 +145,6 @@ export default function HomeScreen() {
         }
       }
 
-      // if (key >= '1' && key <= '5') {
-      //   const playerNum = parseInt(key);
-      //   switch (playerNum) {
-      //     case 1:
-      //       if (p1 !== null && p1 !== undefined) {
-      //         setP1(p1 + adjustAmount);
-      //         console.log("Player 1 score:", p1 + adjustAmount);
-      //       }
-      //       break;
-      //     case 2:
-      //       if (p2 !== null && p2 !== undefined) {
-      //         setP2(p2 + adjustAmount);
-      //       }
-      //       break;
-      //     case 3:
-      //       if (p3 !== null && p3 !== undefined) {
-      //         setP3(p3 + adjustAmount);
-      //       }
-      //       break;
-      //     case 4:
-      //       if (p4 !== null && p4 !== undefined) {
-      //         setP4(p4 + adjustAmount);
-      //       }
-      //       break;
-      //     case 5:
-      //       if (p5 !== null && p5 !== undefined) {
-      //         setP5(p5 + adjustAmount);
-      //       }
-      //       break;
-      //   }
-      // }
     };
 
     // Add keyboard event listener
@@ -180,26 +156,7 @@ export default function HomeScreen() {
     }
   }, [p1, p2, p3, p4, p5, setP1, setP2, setP3, setP4, setP5]);
 
-  // Helper to render a player control row in the Panel
-  const renderControl = (label: string, score: any, setScore: any) => (
-    <View className="flex-row items-center justify-between w-full mb-4 bg-slate-950 p-2 rounded-lg">
-      <Text className="text-white font-bold text-xl w-1/4">{label}: {score}</Text>
-      <View className="flex-row gap-2">
-        <ChangeCountButton count={score} setCount={setScore} amount={1} label="+" />
-        <ChangeCountButton count={score} setCount={setScore} amount={-1} label="-" />
-      </View>
-    </View>
-  );
 
-  // Helper to render the Digital Score
-  const DigitalScore = ({ score }: { score: number | null | undefined }) => (
-    <Text
-      className=" text-red-700 text-9xl text-center my-10"
-      style={{ fontFamily: 'SevenSegment' }}
-    >
-      {score}
-    </Text>
-  );
 
   // --- GAME LOGIC END ---
 
@@ -212,7 +169,10 @@ export default function HomeScreen() {
     <SafeAreaView className="flex-1 bg-black">
       <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 40 }}>
         <SignedIn>
-          <BigText>HELLO</BigText>
+          
+          <TouchableOpacity onPress={() => signOut()}>
+            <BigText>Sign Out</BigText>
+          </TouchableOpacity>
         </SignedIn>
 
 
@@ -248,39 +208,39 @@ export default function HomeScreen() {
             {/* PLAYER VIEWS: Read Only (Click to exit) - Using DigitalScore */}
             {currentView === "player1" && <View>
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p1} />
+                <DigitalScore score={p1} size={sizes?.[0]} rotation={rotations?.[0]}/>
               </TouchableOpacity>
             </View>}
             {currentView === "player2" && <View>
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p2} />
+                <DigitalScore score={p2} size={sizes?.[1]} rotation={rotations?.[1]}/>
               </TouchableOpacity>
             </View>}
             {currentView === "player3" && <View>
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p3} />
+                <DigitalScore score={p3} size={sizes?.[2]} rotation={rotations?.[2]}/>
               </TouchableOpacity>
             </View>}
             {currentView === "player4" && <View>
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p4} />
+                <DigitalScore score={p4} size={sizes?.[3]} rotation={rotations?.[3]}/>
               </TouchableOpacity>
             </View>}
             {currentView === "player5" && <View>
               <TouchableOpacity onPress={() => setCurrentView(null)} className="mt-4 bg-none p-3 rounded-lg">
-                <DigitalScore score={p5} />
+                <DigitalScore score={p5} size={sizes?.[4]} rotation={rotations?.[4]}/>
               </TouchableOpacity>
             </View>}
 
             {/* PANEL VIEW: Controls */}
             {currentView === "panel" && (
-              <View className="w-full">
+              <View className="w-full gap-4">
                 <Subheading>Game Master Panel! </Subheading>
-                {renderControl("P1", p1, setP1)}
-                {renderControl("P2", p2, setP2)}
-                {renderControl("P3", p3, setP3)}
-                {renderControl("P4", p4, setP4)}
-                {renderControl("P5", p5, setP5)}
+                <PlayerControl label="P1" score={p1} setScore={setP1} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={1} />
+                <PlayerControl label="P2" score={p2} setScore={setP2} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={2} />
+                <PlayerControl label="P3" score={p3} setScore={setP3} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={3} />
+                <PlayerControl label="P4" score={p4} setScore={setP4} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={4} />
+                <PlayerControl label="P5" score={p5} setScore={setP5} sizes={sizes} setSizes={setSizes} rotations={rotations} setRotations={setRotations} playerNumber={5} />
               </View>
             )}
 
